@@ -5,7 +5,17 @@ import numpy as np
 from sqlalchemy import create_engine
 
 def load_data(messages_filepath, categories_filepath):
+    """Loads data files containing messages and categories and saves them as
+    data frame.
 
+    Args:
+        messages_filepath (string): name of .csv file with messages
+        categories_filepath (string): name of .csv file with categories
+
+    Returns:
+        df containing merged datasets (messages and categories)
+
+    """
     # load data
     messages = pd.read_csv(messages_filepath)
     categories = pd.read_csv(categories_filepath)
@@ -15,7 +25,17 @@ def load_data(messages_filepath, categories_filepath):
     return df
 
 def clean_data(df):
+    """Cleans the data contained in df: creates a dataframe with a separate
+    column for each category and removed duplicates
 
+    Args:
+        df (data frame): data frame to be cleaned
+
+    Returns:
+        df in clean format
+
+    """
+    # 1. Split categories into separate columns
     # create a dataframe of the 36 individual category columns
     categories = df.categories.str.split(';', expand = True)
     # select the first row of the categories dataframe
@@ -25,24 +45,36 @@ def clean_data(df):
     # rename the columns of `categories`
     categories.columns = category_colnames
 
+    # 2. Convert category values to just numbers 0 or 1
     for column in categories:
         # set each value to be the last character of the string
         categories[column] = categories[column].str[-1]
         # convert column from string to numeric
         categories[column] = pd.to_numeric(categories[column])
 
+    # 3. Replace categories column in df with new category columns
     # drop the original categories column from `df`
     df.drop('categories', axis = 1, inplace = True)
-
     # concatenate the original dataframe with the new `categories` dataframe
     df = pd.concat([df, categories], axis = 1)
 
-    # drop duplicates
+    # 4. Remove duplicates
     df.drop_duplicates(inplace = True)
 
     return df
 
 def save_data(df, database_filename):
+    """Saves the data frame df to sqlite database
+
+    Args:
+        df (data frame): data frame to be saved
+        database_filename (string): name of database file
+
+    Returns:
+        None
+
+    """
+    # save df to database
     engine = create_engine('sqlite:///' + database_filename)
     df.to_sql('messages_categories', engine, index = False, if_exists = 'replace')
 
