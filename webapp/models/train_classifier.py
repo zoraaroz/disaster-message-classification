@@ -92,12 +92,14 @@ def main():
 
         print('Training model...')
         start = time.time()
+        # drop child_alone column because it contains no information
         model.fit(X_train, y_train.drop('child_alone', axis = 1))
         print('Elapsed time: ', time.time() - start, ' seconds')
 
         print('Evaluating model...')
         start = time.time()
-        evaluate_model(model, X_test, y_test)
+        # drop child_alone column because it contains no information
+        evaluate_model(model, X_test, y_test.drop('child_alone', axis = 1))
         print('Elapsed time: ', time.time() - start, ' seconds')
 
         print('Saving model...\n    MODEL: {}'.format(model_filepath))
