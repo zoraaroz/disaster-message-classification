@@ -61,6 +61,10 @@ def clean_data(df):
     # 4. Remove duplicates
     df.drop_duplicates(inplace = True)
 
+    # 5. Save all categories as binary
+    df['related'] = df['related'].astype('str').str.replace('2', '1')
+    df['related'] = df['related'].astype('int')
+
     return df
 
 def save_data(df, database_filename):
