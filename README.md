@@ -4,10 +4,17 @@
 July 2021
 
 ### Description
-This project employs an ETL pipeline and an ML pipeline to classify messages sent during disaster events into different categories. The results are deployed through a web-app.
+This project employs an ETL pipeline and an ML pipeline to classify messages sent during disaster events into different categories. The results are deployed through a webapp.
 
 ### Usage
-To run the webapp, run the web-app/app/run.py
+To run the webapp, run the webapp/app/run.py script by typing
+`<python run.py>`
+into your terminal.
+
+The terminal will display the url of the local server for the webapp. Copy this url into a browser to view the webapp.
+You can type any message into the input field to see its classification. Additionally, the webapp shows a few visualisations of the message data.
+
+![Screenshot](screenshot.png)
 
 ### Files
 - ETL_pipeline_notebook/ETL Pipeline Preparation.ipynb: Jupyter notebook used as preparation for the ETL pipeline
